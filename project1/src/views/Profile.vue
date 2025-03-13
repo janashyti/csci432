@@ -2,18 +2,27 @@
 import Feedback from "../components/Feedback.vue"; 
 import ScrollableContainer from "../components/ScrollableContainer.vue";
 import {ref} from 'vue'
+import { useUserStore } from '@/stores/user.js';
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+const { setUser } = userStore
+const { firstName, lastName, userName, email, token, wholeName } = storeToRefs(userStore)
+
+
+
 const feedbackList = ref([])
 const fetchLimit = 15; 
 const newFeedbackCount = ref(0);
 
-const token = localStorage.getItem("token")
+//const token = localStorage.getItem("token")
     async function getFeedback(){
         let beforeTime = new Date().toISOString(); 
         let url = `https://hap-app-api.azurewebsites.net/messages?limit=15&before=${beforeTime}`;
         const options = {
 		method: "GET",
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${token.value}`,
 		},
 	}
 	let response = await fetch(url, options)
@@ -39,7 +48,7 @@ const token = localStorage.getItem("token")
 
         const response = await fetch(url, {
             method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token.value}` },
         });
 
         if (response.ok) {
@@ -55,7 +64,7 @@ const token = localStorage.getItem("token")
 
         const response = await fetch(url, {
             method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token.value}` },
         });
 
         if (response.ok) {

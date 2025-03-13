@@ -3,8 +3,20 @@ import Header from '../components/Header.vue'
 import Modal from '../components/Modal.vue'
 import { useRouter } from 'vue-router'
 import { ref, useTemplateRef } from 'vue';
+import { useUserStore } from '@/stores/user.js';
+import { storeToRefs } from 'pinia'
 
-const username = ref(localStorage.getItem('username'));
+const userStore = useUserStore()
+const { setUser } = userStore
+const { firstName, lastName, userName, email, token, wholeName } = storeToRefs(userStore)
+console.log(token.value)
+
+function resetUserStore() {
+    userStore.$reset()
+}
+
+//const username = ref(localStorage.getItem('username'));
+const username = userName.value
 const router = useRouter()
 
 const dropdownVisible = ref(false);
@@ -12,15 +24,16 @@ const dropdownVisible = ref(false);
 
 async function signOut(event) {
 	
-	const token = localStorage.getItem("token")
-	console.log(token)
+	//const token = localStorage.getItem("token")
+	
+	console.log(token.value)
 
 	const url = 'https://hap-app-api.azurewebsites.net/user/logout'
 
 	const options = {
 		method: "POST",
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${token.value}`,
 		},
 	}
 
@@ -28,8 +41,9 @@ async function signOut(event) {
 
 	if (response.ok) {
 		if (response.status === 200) {
-			localStorage.removeItem("token")
-			localStorage.removeItem("username")
+			//localStorage.removeItem("token")
+			//localStorage.removeItem("username")
+			resetUserStore()
 			localStorage.removeItem("userLog")
 
 			router.push({
@@ -44,7 +58,7 @@ async function signOut(event) {
 
 async function deleteUser(event){
 
-	const token = localStorage.getItem("token")
+	//const token = localStorage.getItem("token")
 
 	const url = 'https://hap-app-api.azurewebsites.net/user'
 
@@ -58,7 +72,7 @@ async function deleteUser(event){
 		const options = {
 			method: "DELETE",
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${token.value}`,
 			},
 		}
 
@@ -67,8 +81,9 @@ async function deleteUser(event){
 
 		if (response.ok) {
 			if (response.status === 200) {
-				localStorage.removeItem("token")
-				localStorage.removeItem("username")
+				//localStorage.removeItem("token")
+				//localStorage.removeItem("username")
+				resetUserStore()
 
 
 				router.push({
@@ -94,11 +109,12 @@ async function getData(){
 	
 
 let url = 'https://hap-app-api.azurewebsites.net/user'
-const token = localStorage.getItem("token")
+//const token = localStorage.getItem("token")
+
 const options = {
 		method: "GET",
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${token.value}`,
 		},
 	}
 	let response = await fetch(url, options)
@@ -114,10 +130,11 @@ const options = {
 	
 		
 
-		localStorage.setItem('username', editUsername.value);
-		localStorage.setItem('firstname', editFirstname.value);
-		localStorage.setItem('lastname', editLastname.value);
-		localStorage.setItem('email', editEmail.value)
+		//localStorage.setItem('username', editUsername.value);
+		//localStorage.setItem('firstname', editFirstname.value);
+		//localStorage.setItem('lastname', editLastname.value);
+		//localStorage.setItem('email', editEmail.value)
+		setUser(editFirstname.value, editLastname.value, editUsername.value, editEmail.value, token.value)
 		localStorage.setItem('myUserId', data._id)
 		console.log(data._id)
 	}
@@ -144,17 +161,22 @@ function cancel() {
 	modal.value.close()
 }
 
-const uName = ref(localStorage.getItem("username"))
-const fName = ref(localStorage.getItem("firstname"))
-const lName = ref(localStorage.getItem("lastname"))
-const email = ref(localStorage.getItem("email"))
+//const uName = ref(localStorage.getItem("username"))
+//const fName = ref(localStorage.getItem("firstname"))
+//const lName = ref(localStorage.getItem("lastname"))
+//const email = ref(localStorage.getItem("email"))
+const uName = ref(userName)
+const lName = ref(lastName)
+const fName = ref(firstName)
+
+
 const password = ref()
 
 //Save edited data
 async function save() {
 
 	const url = 'https://hap-app-api.azurewebsites.net/user'
-	const token = localStorage.getItem("token")
+	//const token = localStorage.getItem("token")
 
 
 	
@@ -190,7 +212,7 @@ let userData
 		method: "PATCH",
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${token.value}`,
 		},
 		body: jsonData,
 	}
@@ -202,12 +224,14 @@ let userData
 	if(response.status === 200) {
 		console.log("data was changed")
 		modal.value.close()
-		location.reload()
+		//location.reload()
 
-		localStorage.setItem('username', uName.value);
-		localStorage.setItem('firstname', fName.value);
-		localStorage.setItem('lastname', lName.value);
-		localStorage.setItem('email', email.value)
+		//localStorage.setItem('username', uName.value);
+		//localStorage.setItem('firstname', fName.value);
+		//localStorage.setItem('lastname', lName.value);
+		//localStorage.setItem('email', email.value)
+
+		setUser(fName.value, lName.value, uName.value, email.value, token.value)
 		//window.location.reload()
 		//router.push('/main')
 	}

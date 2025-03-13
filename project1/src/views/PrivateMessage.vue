@@ -1,13 +1,20 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user.js';
+import { storeToRefs } from 'pinia'
 
 const router = useRouter()
 const route = useRoute()
-const token = localStorage.getItem("token")
+const userStore = useUserStore()
+const { setUser } = userStore
+const { firstName, lastName, userName, email, token, wholeName } = storeToRefs(userStore)
+
+
+//const token = localStorage.getItem("token")
 const myUserId = localStorage.getItem("myUserId")
 const userId = ref(route.params.userId) 
-const userName = ref(route.query.name)  
+//const userName = ref(route.query.name)  
 const newMessage = ref("")
 const messages = ref([])
 let intervalId = null
@@ -21,7 +28,7 @@ async function getMessages() {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token.value}`
             }
         };
 
@@ -52,7 +59,7 @@ async function sendMessage() {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token.value}`
             },
             body: JSON.stringify({ text: newMessage.value })
         };

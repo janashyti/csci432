@@ -1,12 +1,19 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import Feedback from "./Feedback.vue"; 
+import { useUserStore } from '@/stores/user.js';
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+const { setUser } = userStore
+const { firstName, lastName, userName, email, token, wholeName } = storeToRefs(userStore)
+
 
 const feedbackList = ref([]); 
 const newFeedbackCount = ref(0); 
 const feedbackContainer = ref(null); 
 const isLoading = ref(false);
-const token = localStorage.getItem("token");
+//const token = localStorage.getItem("token");
 
 const fetchLimit = 15; 
 
@@ -19,7 +26,7 @@ async function fetchFeedback(before = null, append = false) {
 
     const options = {
         method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token.value}` },
     };
 
     try {
@@ -45,7 +52,7 @@ async function fetchNewFeedback() {
 
     const options = {
         method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token.value}` },
     };
 
     try {
@@ -70,7 +77,7 @@ async function checkNewFeedbackCount() {
 
     const options = {
         method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token.value}` },
     };
 
     try {

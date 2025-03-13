@@ -64,7 +64,7 @@ async function checkNewItems() {
 
 onMounted(() => {
   containerRef.value.addEventListener("scroll", handleScroll);
-  const interval = setInterval(checkNewItems, 1000);  
+ const interval = setInterval(checkNewItems, 1000);  
   onUnmounted(() => clearInterval(interval));
 });
 </script>

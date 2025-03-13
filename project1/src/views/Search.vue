@@ -1,6 +1,13 @@
 <script setup>
 import {ref} from 'vue'
-const token = localStorage.getItem("token")
+import { useUserStore } from '@/stores/user.js';
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+const { setUser } = userStore
+const { firstName, lastName, userName, email, token, wholeName } = storeToRefs(userStore)
+
+//const token = localStorage.getItem("token")
 
 const feedback = ref()
 
@@ -13,7 +20,7 @@ async function postFeedback(){
 		method: "POST",
 		headers: {
             'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${token.value}`,
 		},
         body: jsonData,
 	}

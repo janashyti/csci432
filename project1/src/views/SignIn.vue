@@ -2,6 +2,10 @@
 import Header from '../components/Header.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { useUserStore } from '@/stores/user.js';
+
+const userStore = useUserStore()
+const { setUser } = userStore
 
 const router = useRouter()
 
@@ -37,12 +41,13 @@ async function signIn (event) {
 	if (response.status === 200) {
 		const data = await response.json()
 
-		localStorage.setItem("token", data.token)
+		//localStorage.setItem("token", data.token)
 		localStorage.setItem("userLog", true)
 		console.log(data)
 		console.log(data.token)
 
 		const user = data.user
+		const token = data.token
         console.log(user)
 
 		const username = user.userName
@@ -51,10 +56,12 @@ async function signIn (event) {
 		const email = user.email
         console.log(username)
 
-		localStorage.setItem('username', username);
-		localStorage.setItem('firstname', firstname);
-		localStorage.setItem('lastname', lastname);
-		localStorage.setItem('email', email);
+		//localStorage.setItem('username', username);
+		//localStorage.setItem('firstname', firstname);
+		//localStorage.setItem('lastname', lastname);
+		//localStorage.setItem('email', email);
+		userStore.setUser(firstname, lastname, username, email, token)
+        
 		
 
 			router.push('/main')

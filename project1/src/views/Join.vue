@@ -3,6 +3,11 @@ import Header from '../components/Header.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import validator from 'validator';
+import { useUserStore } from '@/stores/user.js';
+
+const userStore = useUserStore()
+const { setUser } = userStore
+
 
 const router = useRouter()
 
@@ -72,8 +77,10 @@ async function join (event) {
 
     if (response.status === 201) {
         const data = await response.json()
+        const token = data.token
+        console.log(token)
 
-        localStorage.setItem("token", data.token)
+       // localStorage.setItem("token", data.token)
         console.log(data)
         localStorage.setItem("userLog", true)
 
@@ -86,10 +93,12 @@ async function join (event) {
 		const email = user.email
         console.log(username)
 
-		localStorage.setItem('username', username);
-		localStorage.setItem('firstname', firstname);
-		localStorage.setItem('lastname', lastname);
-		localStorage.setItem('email', email);
+		//localStorage.setItem('username', username);
+		//localStorage.setItem('firstname', firstname);
+		//localStorage.setItem('lastname', lastname);
+		//localStorage.setItem('email', email);
+        userStore.setUser(firstname, lastname, username, email, token)
+        console.log(userStore.token)
 
         router.push('/main')
     }
