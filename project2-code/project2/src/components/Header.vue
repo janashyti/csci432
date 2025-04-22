@@ -1,6 +1,6 @@
 <script setup>
     import { RouterLink } from 'vue-router';
-    //import Logo from './Logo.vue'
+    import Logo from './Logo.vue'
 </script>
 
 <template>
@@ -17,6 +17,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #fffcf150;
 }
 
 :slotted(*) {

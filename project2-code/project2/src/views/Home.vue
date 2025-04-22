@@ -32,6 +32,7 @@ html, body {
 
 
 .background {
+    background-image: url('/explore2.png');
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;

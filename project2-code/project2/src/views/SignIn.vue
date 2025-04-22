@@ -22,7 +22,7 @@ async function signIn (event) {
 		email:email.value, 
 		password: password.value }
 
-	const url = 'https://hap-app-api.azurewebsites.net/user/login'
+	const url = 'https://excursions-api-server.azurewebsites.net/user/sign-in'
 
 	const options = {
 		method: "POST",
@@ -43,19 +43,21 @@ async function signIn (event) {
 		console.log(data.token)
 
 		const user = data.user
-		const token = data.token
+		
         console.log(user)
 
 		const username = user.userName
 		const firstname = user.firstName
 		const lastname = user.lastName
 		const email = user.email
+		const id = user._id
         console.log(username)
 
 		localStorage.setItem('username', username);
 		localStorage.setItem('firstname', firstname);
 		localStorage.setItem('lastname', lastname);
 		localStorage.setItem('email', email);
+		localStorage.setItem('myUserId', id)
 
 		router.push('/main')
 	}
@@ -107,7 +109,7 @@ html, body {
 }
 
 .background {
-    background-image: url('/ModalBackground.png');
+    background-image: url('/explore2.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -117,16 +119,6 @@ html, body {
     top: 0;
     left: 0;
     z-index: -10; 
-}
-
-
-.form {
-    position: relative; 
-    z-index: 10; 
-    background: rgba(255, 255, 255, 0.9); 
-    padding: 20px;
-    border-radius: 10px;
-    pointer-events: auto; 
 }
 
 

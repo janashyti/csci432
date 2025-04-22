@@ -54,7 +54,7 @@ async function join (event) {
 
     const jsonData = JSON.stringify(data)
 
-    const url = 'https://hap-app-api.azurewebsites.net/user'
+    const url = 'https://excursions-api-server.azurewebsites.net/user'
 
     const options = {
         method: "POST",
@@ -87,12 +87,14 @@ async function join (event) {
 		const firstname = user.firstName
 		const lastname = user.lastName
 		const email = user.email
+        const id = user._id
         console.log(username)
 
 		localStorage.setItem('username', username);
 		localStorage.setItem('firstname', firstname);
 		localStorage.setItem('lastname', lastname);
 		localStorage.setItem('email', email);
+        localStorage.setItem('myUserId', id)
 
         router.push('/main')
     }
@@ -157,7 +159,7 @@ html, body {
 
 
 .background {
-    background-image: url('/ModalBackground.png');
+    background-image: url('/explore2.png');
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
@@ -168,5 +170,6 @@ html, body {
     left: 0;
     z-index: -1; 
 }
+
 
 </style>
